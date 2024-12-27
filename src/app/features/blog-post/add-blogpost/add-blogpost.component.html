@@ -1,0 +1,147 @@
+<div class="container max-w-3xl mx-auto p-6">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Add Blog Post</h1>
+
+  <!-- Success Message -->
+  <div
+    *ngIf="successMessage"
+    class="mb-4 p-4 bg-green-100 border border-green-400 text-green-700 rounded"
+  >
+    {{ successMessage }}
+  </div>
+
+  <!-- Error Message -->
+  <div
+    *ngIf="errorMessage"
+    class="mb-4 p-4 bg-red-100 border border-red-400 text-red-700 rounded"
+  >
+    {{ errorMessage }}
+  </div>
+
+  <!-- Form -->
+  <form #form="ngForm" (ngSubmit)="onFormSubmit()" class="mt-3">
+    <div class="mb-4">
+      <label for="title" class="block text-gray-700 text-sm font-bold mb-2"
+        >Title</label
+      >
+      <input
+        type="text"
+        id="title"
+        name="title"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="Title"
+        [(ngModel)]="model.title"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
+        >Blog Url Handle</label
+      >
+      <input
+        id="url_handle"
+        name="url_handle"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="Url Handle"
+        [(ngModel)]="model.url_handle"
+        required
+      />
+    </div>
+    <div class="mb-4">
+      <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
+        >Short Decription</label
+      >
+      <textarea
+        id="decription"
+        name="decription"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="Decription"
+        [(ngModel)]="model.short_description"
+        required
+      ></textarea>
+    </div>
+    <div class="mb-4">
+      <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
+        >Content</label
+      >
+      <textarea
+        id="content"
+        name="content"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="content"
+        [(ngModel)]="model.content"
+        required
+      ></textarea>
+    </div>
+    <div class="mb-4">
+      <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
+        >Featured Image Url</label
+      >
+      <input
+        id="featured_image_url"
+        name="featured_image_url"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="Featured Image Url"
+        [(ngModel)]="model.featured_image_url"
+        required
+      />
+    </div>
+    <div class="mb-4">
+      <label
+        for="published_date"
+        class="block text-gray-700 text-sm font-bold mb-2"
+        >Published Date</label
+      >
+      <input
+        type="date"
+        id="published_date"
+        name="published_date"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        required
+        [(ngModel)]="model.publish_date"
+      />
+    </div>
+    <div class="mb-4">
+      <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
+        >Author</label
+      >
+      <input
+        id="author"
+        name="author"
+        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+        placeholder="Author"
+        [(ngModel)]="model.author"
+        required
+      />
+    </div>
+
+    <div class="mb-4">
+      <label class="inline-flex items-center">
+        <input
+          name="is_visible"
+          id="is_visible"
+          type="checkbox"
+          class="form-checkbox h-5 w-5 text-blue-600"
+          [(ngModel)]="model.is_visible"
+        />
+        <span class="ml-2 text-gray-700">Is Visible?</span>
+      </label>
+    </div>
+
+    <div class="flex justify-between">
+      <button
+        type="submit"
+        class="px-4 py-2 bg-gray-500 text-white rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none focus:bg-blue-500"
+        (click)="goBack()"
+      >
+        Go Back
+      </button>
+      <button
+        type="submit"
+        class="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+      >
+        Add BlogPost
+      </button>
+    </div>
+  </form>
+</div>

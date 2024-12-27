@@ -1,0 +1,26 @@
+<div class="container max-w-3xl mx-auto p-6">
+  <h1 class="title text-3xl font-bold">Blog Post List</h1>
+
+  <div class="flex-col justify-around m-3">
+    <ng-container *ngIf="true">
+      <div class="flex flex-col">
+        <div
+          class="flex justify-between items-center bg-gray-200 p-2 rounded-md"
+        >
+          <span class="font-bold">BlogPost Id</span>
+          <span class="font-bold">BlogPost Name</span>
+          <span class="font-bold">BlogPost URL</span>
+          <span class="font-bold">Actions</span>
+        </div>
+        <button class="mt-3">
+          <a
+            [routerLink]="['/admin/blog-posts/add']"
+            routerLinkActive="router-link-active"
+            class="text-white bg-green-500 px-4 py-2 rounded-md"
+            >Add Blog Post</a
+          >
+        </button>
+      </div>
+    </ng-container>
+  </div>
+</div>
