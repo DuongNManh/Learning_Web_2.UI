@@ -1,0 +1,83 @@
+<div class="container max-w-3xl mx-auto p-6">
+  <h1 class="text-3xl font-bold text-gray-800 mb-6">Update Category</h1>
+
+  <div
+    *ngIf="successMessage"
+    class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-4"
+  >
+    <span class="block sm:inline">{{ successMessage }}</span>
+  </div>
+
+  <div
+    *ngIf="errorMessage"
+    class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-4"
+  >
+    <span class="block sm:inline">{{ errorMessage }}</span>
+  </div>
+
+  <ng-container *ngIf="categoryToUpdate; else notFound">
+    <form #form="ngForm" (ngSubmit)="onFormSubmit()">
+      <div class="mb-4">
+        <label for="id" class="block text-gray-700 text-sm font-bold mb-2"
+          >ID</label
+        >
+        <input
+          type="text"
+          id="id"
+          name="id"
+          [(ngModel)]="categoryToUpdate.id"
+          class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          disabled
+        />
+
+        <div class="mb-4">
+          <label for="name" class="block text-gray-700 text-sm font-bold mb-2"
+            >Name</label
+          >
+          <input
+            type="text"
+            id="name"
+            name="name"
+            [(ngModel)]="categoryToUpdate.name"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          />
+        </div>
+
+        <div class="mb-4">
+          <label
+            for="urlHandle"
+            class="block text-gray-700 text-sm font-bold mb-2"
+            >Description</label
+          >
+          <textarea
+            id="urlHandle"
+            name="urlHandle"
+            [(ngModel)]="categoryToUpdate.url_handle"
+            class="shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none focus:shadow-outline"
+          ></textarea>
+        </div>
+
+        <div class="flex items-center justify-between">
+          <button
+            class="bg-gray-400 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+            (click)="goBack()"
+          >
+            Back
+          </button>
+          <button
+            type="submit"
+            class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded focus:outline-none focus:shadow-outline"
+          >
+            Update
+          </button>
+        </div>
+      </div>
+    </form>
+  </ng-container>
+
+  <ng-template #notFound>
+    <div class="text-center text-gray-600">
+      <p>Category not found</p>
+    </div>
+  </ng-template>
+</div>
