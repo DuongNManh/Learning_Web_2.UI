@@ -19,6 +19,7 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
   paramSubcription?: Subscription;
   categoryToUpdate?: CategoryModel;
   editSubcription?: Subscription;
+  deleteSubcription?: Subscription;
   successMessage = '';
   errorMessage = '';
   
@@ -54,6 +55,9 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
     if (this.editSubcription) {
       this.editSubcription.unsubscribe();
     }
+    if (this.deleteSubcription) {
+      this.deleteSubcription.unsubscribe();
+    }
   }
 
   goBack(): void {
@@ -88,5 +92,25 @@ export class EditCategoryComponent implements OnInit, OnDestroy {
         }
       });
     }
+  }
+
+  deleteCategory(): void {
+    this.deleteSubcription = this.categoryService.deleteCategory(this.id || '').subscribe({
+      next: (response) => {
+        if (response.is_success) {
+          this.successMessage = 'Category deleted successfully!';
+          this.errorMessage = '';
+          this.goBack();
+        } else {
+          // Handle case where is_success is false but it's not an error
+          this.errorMessage = response.reason || response.message;
+          this.successMessage = '';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.reason || 'An error occurred while deleting the category';
+        this.successMessage = '';
+      }
+    });
   }
 }

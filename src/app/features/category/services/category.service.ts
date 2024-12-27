@@ -28,4 +28,8 @@ export class CategoryService {
   updateCategory(id:string, model: CategoryDTO): Observable<ApiResponse<CategoryModel>> {
     return this.http.put<ApiResponse<CategoryModel>>(`${this.category_base}/${id}`, model);
   }
+
+  deleteCategory(id: string): Observable<ApiResponse<CategoryModel>> {
+    return this.http.delete<ApiResponse<CategoryModel>>(`${this.category_base}/${id}`);
+  }
 }
