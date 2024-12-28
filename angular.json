@@ -94,9 +94,18 @@
               }
             ],
             "styles": [
-              "src/styles.css"
-            ],
-            "scripts": []
+  "node_modules/prismjs/themes/prism.css",
+  "node_modules/prismjs/plugins/line-numbers/prism-line-numbers.css",
+  "node_modules/katex/dist/katex.min.css",
+  "node_modules/github-markdown-css/github-markdown.css",
+  "src/styles.css"
+],
+            "scripts": [
+              "node_modules/prismjs/prism.js",
+              "node_modules/prismjs/components/prism-typescript.js",
+              "node_modules/prismjs/components/prism-csharp.min.js",
+              "node_modules/prismjs/components/prism-css.min.js"
+            ]
           }
         }
       }

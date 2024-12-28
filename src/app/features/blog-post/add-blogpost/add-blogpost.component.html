@@ -1,4 +1,4 @@
-<div class="container max-w-3xl mx-auto p-6">
+<div class="container mx-auto p-6">
   <h1 class="text-3xl font-bold text-gray-800 mb-6">Add Blog Post</h1>
 
   <!-- Success Message -->
@@ -64,19 +64,34 @@
       <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
         >Content</label
       >
-      <textarea
-        id="content"
-        name="content"
-        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        placeholder="content"
-        [(ngModel)]="model.content"
-        required
-      ></textarea>
+      <div class="flex flex-row">
+        <div class="w-1/2 p-3">
+          <textarea
+            id="content"
+            name="content"
+            class="block w-full h-[350px] px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            placeholder="content"
+            [(ngModel)]="model.content"
+            required
+          ></textarea>
+        </div>
+        <div class="w-1/2 p-3 h-[350px] overflow-y-auto">
+          <div class="markdown-body">
+            <markdown [data]="model.content"></markdown>
+          </div>
+        </div>
+      </div>
     </div>
     <div class="mb-4">
       <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
         >Featured Image Url</label
       >
+      <ng-container *ngIf="model.featured_image_url != ''">
+        <div class="p-3">
+          <img [src]="model.featured_image_url" class="h-1/4 w-1/4" />
+        </div>
+      </ng-container>
+
       <input
         id="featured_image_url"
         name="featured_image_url"
