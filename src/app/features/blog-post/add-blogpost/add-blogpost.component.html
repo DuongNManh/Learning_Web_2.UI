@@ -48,6 +48,27 @@
       />
     </div>
     <div class="mb-4">
+      <label for="categories" class="block text-gray-700 text-sm font-bold mb-2"
+        >Categories</label
+      >
+      <ng-container *ngIf="categories">
+        <select
+          id="categories"
+          name="categories"
+          class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+          [(ngModel)]="model.categories"
+          required
+          multiple
+        >
+          <option value="">Select Category</option>
+          <option *ngFor="let category of categories" [value]="category.id">
+            {{ category.name }}
+          </option>
+        </select>
+      </ng-container>
+    </div>
+
+    <div class="mb-4">
       <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
         >Short Decription</label
       >

@@ -1,3 +1,5 @@
+import { CategoryModel } from '../../category/models/CategoryModel';
+
 export type BlogPostDTO = {
     title: string;
     short_description: string;
@@ -7,6 +9,7 @@ export type BlogPostDTO = {
     publish_date: Date;
     author: string;
     is_visible: boolean;
+    categories: string[];
 }
 
 export type BlogPostModel = {
@@ -18,4 +21,5 @@ export type BlogPostModel = {
     url_handle: string;
     publish_date: Date;
     author: string;
+    categories: CategoryModel[];
 }
