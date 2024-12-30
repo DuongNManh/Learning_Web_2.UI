@@ -25,6 +25,10 @@ export const routes: Routes = [
     {
         path: 'admin/blog-posts/add',
         component: AddBlogpostComponent
+    },
+    {
+        path: 'admin/blog-posts/edit/:id',
+        component: AddBlogpostComponent
     }
 
 ];

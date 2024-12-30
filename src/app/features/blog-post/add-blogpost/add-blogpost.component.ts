@@ -1,8 +1,8 @@
 import { Component, OnInit } from '@angular/core';
-import { Route, Router } from '@angular/router';
+import { Route, Router, ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
-import { BlogPostDTO } from '../models/BlogPostModel';
+import { BlogPostDTO, BlogPostModel } from '../models/BlogPostModel';
 import { FormsModule } from '@angular/forms';
 import { BlogPostService } from '../services/blog-post.service';
 import { Observable, Subscription } from 'rxjs';
@@ -31,10 +31,13 @@ export class AddBlogpostComponent implements OnInit{
     private blogSubmitSubscription?: Subscription;
     model: BlogPostDTO;
     categories?: CategoryModel[] = [];
+    isEditMode = false;
+    blogPostId?: string;
 
     constructor(private router: Router, 
       private blogPostService: BlogPostService,
-      private categoryService: CategoryService) {
+      private categoryService: CategoryService,
+      private route: ActivatedRoute) {
         this.model = {
             title: '',
             short_description: '',
@@ -51,37 +54,70 @@ export class AddBlogpostComponent implements OnInit{
     this.categoryService.getAllCategories()
     .subscribe({
       next: (response) => {
-        this.categories = response.data,
-        console.log('Categories:', response.data);
+        this.categories = response.data;
+      }
+    });
+
+    this.route.paramMap.subscribe(params => {
+      this.blogPostId = params.get('id')?.toString();
+      if (this.blogPostId) {
+        this.isEditMode = true;
+        this.loadBlogPost(this.blogPostId);
       }
     });
 
   }
 
     onFormSubmit(): void {
-      // Call the service to add the blog post
-      console.log(this.model);
-      // this.blogSubmitSubscription = this.blogPostService.createBlogPost(this.model)
-      // .subscribe({
-      //   next: (response) =>{
-      //     if(response.is_success){
-      //       this.successMessage = response.message;
-      //       setTimeout(() => {
-      //         this.goBack();
-      //       }, 2000);
-      //     } else {
-      //       this.errorMessage = response.message || "An error occurred while adding the blog post."; 
-      //     }
-      //   },
-      //   error: (error) => {
-      //     console.error('Error adding blog post:', error);
-      //     this.errorMessage = error.message || 'An error occurred while adding the blog post.';
-      //   },
-      // })
+      const request = this.isEditMode 
+        ? this.blogPostService.updateBlogPost(this.blogPostId!, this.model)
+        : this.blogPostService.createBlogPost(this.model);
+
+      this.blogSubmitSubscription = request.subscribe({
+        next: (response) => {
+          if(response.is_success){
+            this.successMessage = response.message;
+            setTimeout(() => {
+              this.goBack();
+            }, 2000);
+          } else {
+            this.errorMessage = response.message || "An error occurred"; 
+          }
+        },
+        error: (error) => {
+          console.error('Error:', error);
+          this.errorMessage = error.message || 'An error occurred';
+        },
+      });
 
     }
 
     goBack() {
     this.router.navigate(['/admin/blog-posts']);
+    }
+
+    loadBlogPost(id: string): void {
+      this.blogPostService.getBlogPostById(id).subscribe({
+        next: (response) => {
+          // Map BlogPostModel to BlogPostDTO
+          const blogPost = response.data;
+          if(blogPost){
+            this.model = {
+            title: blogPost.title,
+            short_description: blogPost.short_description,
+            content: blogPost.content,
+            featured_image_url: blogPost.featured_image_url,
+            url_handle: blogPost.url_handle,
+            publish_date: blogPost.publish_date,
+            author: blogPost.author,
+            is_visible: true, // Set default or get from API if available
+            categories: blogPost.categories.map(category => category.id) // Extract category IDs
+          };
+        }},
+        error: (error) => {
+          this.errorMessage = 'Error loading blog post';
+          console.error(error);
+        }
+      });
     }
 }
