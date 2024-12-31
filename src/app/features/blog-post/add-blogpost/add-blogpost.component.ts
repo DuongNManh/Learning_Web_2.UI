@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { Route, Router, ActivatedRoute } from '@angular/router';
 import { RouterModule } from '@angular/router';
 import { NgIf } from '@angular/common';
@@ -25,14 +25,15 @@ import { CategoryModel } from '../../category/models/CategoryModel';
   templateUrl: './add-blogpost.component.html',
   styleUrl: './add-blogpost.component.css'
 })
-export class AddBlogpostComponent implements OnInit{
+export class AddBlogpostComponent implements OnInit, OnDestroy{
     successMessage: string = '';
     errorMessage: string = '';
     private blogSubmitSubscription?: Subscription;
+    private categoriesSubscription?: Subscription;
     model: BlogPostDTO;
     categories?: CategoryModel[] = [];
     isEditMode = false;
-    blogPostId?: string;
+    blogPostId?: string; //for edit mode, we got the id from the route
 
     constructor(private router: Router, 
       private blogPostService: BlogPostService,
@@ -50,8 +51,13 @@ export class AddBlogpostComponent implements OnInit{
             categories: []
         };
     }
+  ngOnDestroy(): void {
+    this.blogSubmitSubscription?.unsubscribe();
+    this.categoriesSubscription?.unsubscribe();
+  }
+
   ngOnInit(): void {
-    this.categoryService.getAllCategories()
+    this.categoriesSubscription = this.categoryService.getAllCategories()
     .subscribe({
       next: (response) => {
         this.categories = response.data;
@@ -76,6 +82,7 @@ export class AddBlogpostComponent implements OnInit{
       this.blogSubmitSubscription = request.subscribe({
         next: (response) => {
           if(response.is_success){
+            console.log(response);
             this.successMessage = response.message;
             setTimeout(() => {
               this.goBack();
@@ -108,7 +115,7 @@ export class AddBlogpostComponent implements OnInit{
             content: blogPost.content,
             featured_image_url: blogPost.featured_image_url,
             url_handle: blogPost.url_handle,
-            publish_date: blogPost.publish_date,
+            publish_date: new Date(blogPost.publish_date),
             author: blogPost.author,
             is_visible: true, // Set default or get from API if available
             categories: blogPost.categories.map(category => category.id) // Extract category IDs
