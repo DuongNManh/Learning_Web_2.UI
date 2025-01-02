@@ -34,6 +34,7 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
     categories?: CategoryModel[] = [];
     isEditMode = false;
     blogPostId?: string; //for edit mode, we got the id from the route
+    isDeleting: boolean = false;
 
     constructor(private router: Router, 
       private blogPostService: BlogPostService,
@@ -82,7 +83,7 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
       this.blogSubmitSubscription = request.subscribe({
         next: (response) => {
           if(response.is_success){
-            console.log(response);
+            console.log(this.model);
             this.successMessage = response.message;
             setTimeout(() => {
               this.goBack();
@@ -97,6 +98,37 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
         },
       });
 
+    }
+
+    deleteBlogPost(): void {
+      if (!confirm('Are you sure you want to delete this blog post? This action cannot be undone.')) {
+        return;
+      }
+
+      if(this.blogPostId) {
+        this.isDeleting = true;
+        this.errorMessage = '';
+        
+        this.blogPostService.deleteBlogPost(this.blogPostId).subscribe({
+          next: (response) => {
+            if(response.is_success){
+              this.successMessage = response.message;
+              setTimeout(() => {
+                this.goBack();
+              }, 2000);
+            } else {
+              this.errorMessage = response.message || "An error occurred"; 
+            }
+          },
+          error: (error) => {
+            console.error('Error:', error);
+            this.errorMessage = error.message || 'An error occurred';
+          },
+          complete: () => {
+            this.isDeleting = false;
+          }
+        });
+      }
     }
 
     goBack() {
@@ -115,11 +147,12 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
             content: blogPost.content,
             featured_image_url: blogPost.featured_image_url,
             url_handle: blogPost.url_handle,
-            publish_date: new Date(blogPost.publish_date),
+            publish_date: blogPost.publish_date,
             author: blogPost.author,
             is_visible: true, // Set default or get from API if available
             categories: blogPost.categories.map(category => category.id) // Extract category IDs
           };
+          console.log(this.model);
         }},
         error: (error) => {
           this.errorMessage = 'Error loading blog post';

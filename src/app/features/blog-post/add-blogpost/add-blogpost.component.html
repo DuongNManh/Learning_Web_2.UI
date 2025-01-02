@@ -172,12 +172,23 @@
       >
         Go Back
       </button>
-      <button
-        type="submit"
-        class="px-4 py-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
-      >
-        Add BlogPost
-      </button>
+      <div>
+        <button
+          type="submit"
+          class="px-4 py-2 m-2 bg-blue-500 text-white rounded-md text-sm font-medium hover:bg-blue-500 focus:outline-none focus:bg-blue-500"
+        >
+          {{ isEditMode ? "Update Blog Post" : "Add Blog Post" }}
+        </button>
+        <button
+          type="button"
+          *ngIf="isEditMode"
+          class="px-4 py-2 bg-red-500 text-white rounded-md text-sm font-medium hover:bg-red-700 focus:outline-none focus:bg-red-500 disabled:bg-red-300 disabled:cursor-not-allowed flex items-center"
+          (click)="deleteBlogPost()"
+          [disabled]="isDeleting"
+        >
+          {{ isDeleting ? "Deleting..." : "Delete Blog Post" }}
+        </button>
+      </div>
     </div>
   </form>
 </div>
