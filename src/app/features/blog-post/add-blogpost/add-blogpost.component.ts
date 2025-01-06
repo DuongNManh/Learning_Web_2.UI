@@ -10,18 +10,20 @@ import { CommonModule } from '@angular/common';
 import { MarkdownModule } from 'ngx-markdown';
 import { CategoryService } from '../../category/services/category.service';
 import { CategoryModel } from '../../category/models/CategoryModel';
+import { ImageSelectorComponent } from "../../../shared/components/image-selector/image-selector.component";
 
 
 @Component({
   selector: 'app-add-blogpost',
+  standalone: true,
   imports: [
     RouterModule,
     NgIf,
     FormsModule,
     CommonModule,
-    MarkdownModule
+    MarkdownModule,
+    ImageSelectorComponent
   ],
-  standalone: true,
   templateUrl: './add-blogpost.component.html',
   styleUrl: './add-blogpost.component.css'
 })
@@ -35,6 +37,7 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
     isEditMode = false;
     blogPostId?: string; //for edit mode, we got the id from the route
     isDeleting: boolean = false;
+    isImageSelectorVisible: boolean = false;
 
     constructor(private router: Router, 
       private blogPostService: BlogPostService,
