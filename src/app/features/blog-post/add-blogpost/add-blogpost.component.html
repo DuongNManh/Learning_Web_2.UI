@@ -1,4 +1,4 @@
-<div class="container mx-auto p-6">
+<div class="container mx-auto p-6 .fade-in">
   <h1 class="text-3xl font-bold text-gray-800 mb-6">Add Blog Post</h1>
 
   <!-- Success Message -->
@@ -70,13 +70,13 @@
 
     <div class="mb-4">
       <label for="url_handle" class="block text-gray-700 text-sm font-bold mb-2"
-        >Short Decription</label
+        >Short Description</label
       >
       <textarea
-        id="decription"
-        name="decription"
+        id="description"
+        name="description"
         class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        placeholder="Decription"
+        placeholder="Description"
         [(ngModel)]="model.short_description"
         required
       ></textarea>
@@ -108,25 +108,16 @@
         >Featured Image Url</label
       >
       <button
-        (click)="isImageSelectorVisible = !isImageSelectorVisible"
+        (click)="onImageSelectorOpen($event)"
         class="px-4 py-2 bg-gray-300 text-white rounded-md text-sm font-medium hover:bg-gray-500 focus:outline-none focus:bg-gray-500 flex items-center"
       >
         Select Image
       </button>
-      <!-- <ng-container *ngIf="model.featured_image_url != ''">
+      <ng-container *ngIf="model.featured_image_url != ''">
         <div class="p-3">
           <img [src]="model.featured_image_url" class="h-1/4 w-1/4" />
         </div>
       </ng-container>
-
-      <input
-        id="featured_image_url"
-        name="featured_image_url"
-        class="block w-full px-3 py-2 rounded-md text-sm font-medium ring-black ring-1 text-gray-700 placeholder-gray-400 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-        placeholder="Featured Image Url"
-        [(ngModel)]="model.featured_image_url"
-        required
-      /> -->
     </div>
     <div class="mb-4">
       <label
@@ -172,7 +163,7 @@
 
     <div class="flex justify-between">
       <button
-        type="submit"
+        type="button"
         class="px-4 py-2 bg-gray-500 text-white rounded-md text-sm font-medium hover:bg-gray-700 focus:outline-none focus:bg-blue-500"
         (click)="goBack()"
       >
@@ -203,7 +194,7 @@
   class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
   *ngIf="isImageSelectorVisible"
 >
-  <div class="relative bg-white rounded-lg w-3/4 h-3/4 overflow-hidden">
+  <div class="relative bg-white rounded-lg w-5/6 h-5/6 overflow-hidden">
     <button
       class="absolute top-4 right-4 p-2 rounded-full bg-gray-200 hover:bg-gray-300 transition-colors duration-200"
       (click)="isImageSelectorVisible = false"

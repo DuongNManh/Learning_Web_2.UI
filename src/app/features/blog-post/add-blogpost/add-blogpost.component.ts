@@ -11,6 +11,7 @@ import { MarkdownModule } from 'ngx-markdown';
 import { CategoryService } from '../../category/services/category.service';
 import { CategoryModel } from '../../category/models/CategoryModel';
 import { ImageSelectorComponent } from "../../../shared/components/image-selector/image-selector.component";
+import { ImageService } from '../../../shared/components/image-selector/image.service';
 
 
 @Component({
@@ -18,7 +19,6 @@ import { ImageSelectorComponent } from "../../../shared/components/image-selecto
   standalone: true,
   imports: [
     RouterModule,
-    NgIf,
     FormsModule,
     CommonModule,
     MarkdownModule,
@@ -32,6 +32,7 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
     errorMessage: string = '';
     private blogSubmitSubscription?: Subscription;
     private categoriesSubscription?: Subscription;
+    private imageSubscription?: Subscription;
     model: BlogPostDTO;
     categories?: CategoryModel[] = [];
     isEditMode = false;
@@ -42,6 +43,7 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
     constructor(private router: Router, 
       private blogPostService: BlogPostService,
       private categoryService: CategoryService,
+      private imageService: ImageService,
       private route: ActivatedRoute) {
         this.model = {
             title: '',
@@ -58,6 +60,7 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
   ngOnDestroy(): void {
     this.blogSubmitSubscription?.unsubscribe();
     this.categoriesSubscription?.unsubscribe();
+    this.imageSubscription?.unsubscribe();
   }
 
   ngOnInit(): void {
@@ -76,6 +79,21 @@ export class AddBlogpostComponent implements OnInit, OnDestroy{
       }
     });
 
+    this.imageSubscription = this.imageService.onSelectedImage()
+      .subscribe({
+        next: (image) => {
+          if(image && this.model){
+            this.model.featured_image_url = image.url;
+            this.isImageSelectorVisible = false;
+          }
+        }
+      });
+
+  }
+
+  onImageSelectorOpen(event: Event): void {
+    event.preventDefault();
+    this.isImageSelectorVisible = true;
   }
 
     onFormSubmit(): void {

@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit,ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { ImageDTO, ImageModel } from '../models/ImageModel';
 import { FormsModule } from '@angular/forms';
@@ -12,7 +12,7 @@ import { Subscription } from 'rxjs';
   templateUrl: './image-selector.component.html',
   styleUrl: './image-selector.component.css'
 })
-export class ImageSelectorComponent {
+export class ImageSelectorComponent implements OnInit, AfterViewInit {
   imageDTO: ImageDTO = {
     file: null as unknown as File,
     file_name: '',
@@ -21,10 +21,62 @@ export class ImageSelectorComponent {
   selectedImage?: ImageModel;
   uploadSubscription?: Subscription;
   previewUrl?: string;
+  images?: ImageModel[] = [];
+  canScrollLeft = false;
+  canScrollRight = false;
 
-  constructor(
-    private imageService: ImageService
-  ) {}
+  constructor(private imageService: ImageService) {}
+
+  ngOnInit(): void {
+    this.loadImages();
+  }
+
+  ngAfterViewInit() {
+    this.checkScrollButtons();
+    // Add scroll event listener to update button visibility
+    this.imageContainer.nativeElement.addEventListener('scroll', () => {
+      this.checkScrollButtons();
+    });
+  }
+
+  private loadImages(): void {
+    this.imageService.getAllImages().subscribe({
+      next: (response) => {
+        if (response.is_success) {
+          this.images = response.data;
+          // Check scroll buttons after images are loaded
+          setTimeout(() => this.checkScrollButtons(), 0);
+        }
+        console.log('Images', this.images);
+      },
+      error: (error) => {
+        console.error('Error fetching images', error);
+      }
+    });
+  }
+
+  private checkScrollButtons(): void {
+    const container = this.imageContainer.nativeElement;
+    this.canScrollLeft = container.scrollLeft > 0;
+    this.canScrollRight = container.scrollLeft < (container.scrollWidth - container.clientWidth);
+  }
+
+  scrollImages(direction: 'prev' | 'next'): void {
+    const container = this.imageContainer.nativeElement;
+    const scrollAmount = container.offsetWidth * 0.8; // Scroll by 80% of the container's width
+
+    const targetScroll = direction === 'prev' 
+      ? container.scrollLeft - scrollAmount
+      : container.scrollLeft + scrollAmount;
+
+    container.scrollTo({
+      left: targetScroll,
+      behavior: 'smooth'
+    });
+
+    // Update button visibility after scrolling
+    setTimeout(() => this.checkScrollButtons(), 100);
+  }
 
   onFileSelected(event: Event): void {
     const element = event.currentTarget as HTMLInputElement;
@@ -62,6 +114,7 @@ export class ImageSelectorComponent {
       next: (response) => {
         this.selectedImage = response.data;
         this.resetForm();
+        this.loadImages();
       },
       error: (error) => {
         console.error('Error uploading image', error);
@@ -84,10 +137,12 @@ export class ImageSelectorComponent {
     }
   }
 
-  onDelete(): void {
-    if (this.selectedImage?.id) {
-      // Implement delete logic here using the image service
-      // this.imageService.deleteImage(this.selectedImage.id).subscribe(...)
-    }
+  onSelected(image: ImageModel): void {
+      this.selectedImage = image;
+      this.imageService.selectImage(image);
+      console.log('Selected image', image);
   }
+  
+  @ViewChild('imageContainer') imageContainer!: ElementRef;
+
 }

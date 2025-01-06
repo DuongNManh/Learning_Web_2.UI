@@ -3,6 +3,28 @@
 @tailwind components;
 @tailwind utilities;
 
+/* Global transition for all elements */
+* {
+    transition: all 0.3s ease; /* Adjust the duration and easing as needed */
+}
+
+/* Optional: Add a hover effect for buttons */
+button, a {
+    transition: background-color 0.5s ease, color 0.5s ease;
+}
+
+/* Optional: Add a fade-in effect for elements */
+.fade-in {
+    opacity: 0;
+    animation: fadeIn 1s forwards;
+}
+
+@keyframes fadeIn {
+    to {
+        opacity: 1;
+    }
+}
+
 .images-container-modal{
     width: 100%;
     height: 100vh;
@@ -13,4 +35,8 @@
     padding: 50px;
     background-color: rgba(0,0,0,0.5);
 
+}
+
+html {
+    scroll-behavior: smooth;
 }

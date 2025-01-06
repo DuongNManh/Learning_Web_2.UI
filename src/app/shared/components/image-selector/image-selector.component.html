@@ -1,13 +1,15 @@
-<div class="bg-white rounded-lg shadow-lg p-8 h-full">
-  <div class="border-b border-gray-200 pb-4 mb-8">
+<div class="bg-gray-300 rounded-lg shadow-lg p-4 h-full w-full .fade-in">
+  <div class="border-b border-gray-200 pb-4 mb-4">
     <h4 class="text-2xl font-semibold text-gray-800">Image Selector</h4>
   </div>
 
-  <div class="max-w-5xl mx-auto">
-    <div class="flex flex-col md:flex-row md:space-x-8 space-y-8 md:space-y-0">
+  <div class="max-w-6xl h-3/4 mx-auto">
+    <div
+      class="flex flex-col md:flex-row md:space-x-8 space-y-4 md:space-y-0 h-4/6"
+    >
       <!-- Preview Section -->
       <div class="md:w-1/2">
-        <h1 class="text-xl font-semibold text-gray-700 mb-4">Preview</h1>
+        <h1 class="text-xl font-semibold text-gray-700 mb-1">Preview</h1>
         <div
           class="bg-gray-50 rounded-lg p-4 border-2 border-dashed border-gray-300"
         >
@@ -21,9 +23,13 @@
 
       <!-- Upload Section -->
       <div class="md:w-1/2">
-        <h1 class="text-xl font-semibold text-gray-700 mb-4">Upload Image</h1>
-        <form (ngSubmit)="uploadImage()" #imageForm="ngForm" class="space-y-6">
-          <div class="space-y-2">
+        <h1 class="text-xl font-semibold text-gray-700 mb-1">Upload Image</h1>
+        <form
+          (ngSubmit)="uploadImage()"
+          #imageForm="ngForm"
+          class="space-y-5 h-full"
+        >
+          <div class="space-y-1">
             <label for="file" class="block text-sm font-medium text-gray-700"
               >Select Image:</label
             >
@@ -36,7 +42,7 @@
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label
               for="fileName"
               class="block text-sm font-medium text-gray-700"
@@ -52,7 +58,7 @@
             />
           </div>
 
-          <div class="space-y-2">
+          <div class="space-y-1">
             <label
               for="imageTitle"
               class="block text-sm font-medium text-gray-700"
@@ -78,23 +84,72 @@
         </form>
       </div>
     </div>
-  </div>
-</div>
+    <!--All Images Preview -->
+    <div class="mt-16 p-2 bg-white rounded-lg shadow-lg">
+      <h3 class="text-lg font-semibold text-gray-700 mb-1">Uploaded Images</h3>
 
-<!-- Selected Image Preview -->
-<div *ngIf="selectedImage" class="mt-8 p-6 bg-white rounded-lg shadow-lg">
-  <h3 class="text-lg font-semibold text-gray-700 mb-4">Uploaded Image</h3>
-  <div class="space-y-4">
-    <img
-      [src]="selectedImage.url"
-      [alt]="selectedImage.title"
-      class="w-full max-h-64 object-cover rounded-lg shadow-sm"
-    />
-    <button
-      (click)="onDelete()"
-      class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500"
-    >
-      Delete Image
-    </button>
+      <!-- Image Navigation -->
+      <div class="relative">
+        <!-- Previous Button -->
+        <button
+          (click)="scrollImages('prev')"
+          class="absolute top-1/2 left-0 z-10 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          [class.invisible]="!canScrollLeft"
+          aria-label="Scroll Left"
+        >
+          &#8592;
+        </button>
+
+        <!-- Scrollable Image Grid -->
+        <div
+          #imageContainer
+          class="overflow-x-auto flex gap-2 p-1 scroll-smooth"
+          style="
+            scroll-behavior: smooth;
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+          "
+        >
+          <div
+            *ngFor="let image of images; let i = index"
+            class="relative group flex-shrink-0 w-40"
+          >
+            <img
+              [src]="image.url"
+              [alt]="image.title"
+              class="w-full h-24 object-cover rounded-lg shadow-sm"
+            />
+            <div
+              class="absolute inset-0 bg-black bg-opacity-0 group-hover:bg-opacity-30 transition-opacity duration-300 rounded-lg flex items-center justify-center"
+            >
+              <button
+                (click)="onSelected(image)"
+                class="hidden group-hover:block px-3 py-1 bg-green-600 text-white text-sm rounded-md hover:bg-green-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-green-500"
+              >
+                Select
+              </button>
+            </div>
+            <p class="mt-2 text-sm font-medium text-gray-700 truncate">
+              {{ image.title }}
+            </p>
+          </div>
+        </div>
+
+        <!-- Next Button -->
+        <button
+          (click)="scrollImages('next')"
+          class="absolute top-1/2 right-0 z-10 transform -translate-y-1/2 bg-gray-200 hover:bg-gray-300 text-gray-700 p-2 rounded-full shadow-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-gray-500"
+          [class.invisible]="!canScrollRight"
+          aria-label="Scroll Right"
+        >
+          &#8594;
+        </button>
+      </div>
+
+      <!-- Empty State -->
+      <div *ngIf="!images?.length" class="text-center py-8">
+        <p class="text-gray-500">No images uploaded yet</p>
+      </div>
+    </div>
   </div>
 </div>

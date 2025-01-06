@@ -13,10 +13,15 @@ import { MarkdownModule } from 'ngx-markdown';
     NavbarComponent, 
     FormsModule, 
     HttpClientModule,
-    MarkdownModule],
+    MarkdownModule,
+  ],
   templateUrl: './app.component.html',
-  styleUrl: './app.component.css'
+  styleUrls: ['./app.component.css'],
 })
 export class AppComponent {
   title = 'Post_Management.UI';
+
+  getRouteAnimationState(outlet: RouterOutlet) {
+    return outlet.isActivated ? outlet.activatedRoute : '';
+  }
 }
